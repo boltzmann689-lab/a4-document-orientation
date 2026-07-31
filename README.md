@@ -7,7 +7,7 @@ A Deep Learning-based supervised classification pipeline to detect and auto-corr
 
 Due to Git file size limitations, the trained model weights are hosted on Google Drive.
 
-* 📥 **Download Trained Weights (`best_rotnet_model.pth`):** [Download via Google Drive](https://drive.google.com/file/d/xxxxxxxxx/view?usp=sharing)
+* 📥 **Download Trained Weights (`best_rotnet_model.pth`):** [Download via Google Drive](https://drive.google.com/file/d/1W6vvsKuBHFEuX6YKELcBGD8KVjwg3076/view?usp=sharing)
 
 ## 📌 1. Project Overview & Methodology
 
