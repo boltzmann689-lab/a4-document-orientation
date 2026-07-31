@@ -1,0 +1,22 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# PyTorch Checkpoints & Models
+*.pth
+*.pt
+*.onnx
+
+# Data & Notebooks
+data/*.jpg
+data/*.png
+!confusion_matrices_all.png
+.ipynb_checkpoints/
+*.ipynb
+
+# Environments
+venv/
+.env
+.vscode/
+.idea/
