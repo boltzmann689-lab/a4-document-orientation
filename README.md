@@ -3,6 +3,11 @@
 A Deep Learning-based supervised classification pipeline to detect and auto-correct document orientation ($0^\circ$, $90^\circ$, $180^\circ$, $270^\circ$) using ResNet18.
 
 ---
+## 💾 Model Checkpoint
+
+Due to Git file size limitations, the trained model weights are hosted on Google Drive.
+
+* 📥 **Download Trained Weights (`best_rotnet_model.pth`):** [Download via Google Drive](https://drive.google.com/file/d/xxxxxxxxx/view?usp=sharing)
 
 ## 📌 1. Project Overview & Methodology
 
