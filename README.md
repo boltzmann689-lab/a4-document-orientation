@@ -12,8 +12,8 @@ Due to Git file size limitations, the trained model weights are hosted on Google
 ## 📌 1. Project Overview & Methodology
 
 * **Task Standard:** Supervised Image Classification (4 classes corresponding to rotation angles: $0^\circ$, $90^\circ$, $180^\circ$, and $270^\circ$).
-* **Model Architecture:** ResNet18 (Pretrained on ImageNet, custom final FC layer for 4-class prediction).
-* **Data Augmentation:** On-the-fly continuous 4-angle rotation via custom PyTorch `Dataset`, effectively expanding the training capability to $4,000+$ instances.
+* **Model Architecture:** ResNet18 (Pretrained on ImageNet).
+* **Data Augmentation:** On-the-fly continuous 4-angle rotation via custom PyTorch `Dataset`, effectively expanding the training capability to $4,000$ instances.
 
 ---
 
@@ -25,12 +25,12 @@ To ensure robustness, **1,000 original upright documents** were curated across 4
 | :--- | :--- | :---: |
 | **Scan** | Flatbed scanned documents (DocVQA) | 250 |
 | **Receipt** | Receipts & Invoices (CORD-v2) | 250 |
-| **Handwritten** | Full-page handwritten forms (IAM Forms) | 250 |
+| **Handwritten** | Full-page handwritten forms (IAM Handwritten Dataset) | 250 |
 | **Captured** | CamScanner / Mobile camera captures (SmartDoc) | 250 |
 | **Total** | **Diverse multi-source document dataset** | **1,000** |
 
 ### Stratified Data Splitting
-Using `StratifiedKFold / train_test_split` with a ratio of **70% Train - 15% Validation - 15% Test**, we maintain an identical sub-category class distribution across all three splits:
+Using `train_test_split` with a ratio of **70% Train - 15% Validation - 15% Test**, we maintain an identical sub-category class distribution across all three splits:
 
 * **Train Set (70%):** 700 original images ($2,800$ rotated samples)
 * **Val Set (15%):** 150 original images ($600$ rotated samples)
