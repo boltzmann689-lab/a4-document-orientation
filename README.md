@@ -1,11 +1,10 @@
 # Phân loại và điều chỉnh góc xoay của tài liệu A4 
 
-A Deep Learning-based supervised classification pipeline to detect and auto-correct document orientation ($0^\circ$, $90^\circ$, $180^\circ$, $270^\circ$) using ResNet18.
 Mô hình học Deep Learning có giám sát để phân loại và điều chỉnh góc xoay hướng của tài liệu  ($0^\circ$, $90^\circ$, $180^\circ$, $270^\circ$) sử dụng ResNet18.
 
 ---
 
-*Tập trọng số đã huấn luyện: (`best_rotnet_model.pth`):** [Download via Google Drive](https://drive.google.com/file/d/1W6vvsKuBHFEuX6YKELcBGD8KVjwg3076/view?usp=sharing)
+*Tập trọng số đã huấn luyện: (`best_rotnet_model.pth`):* [Download via Google Drive](https://drive.google.com/file/d/1W6vvsKuBHFEuX6YKELcBGD8KVjwg3076/view?usp=sharing)
 
 ## 1.Tổng quan về dự án và phương pháp
 
@@ -15,7 +14,7 @@ Mô hình học Deep Learning có giám sát để phân loại và điều ch�
 
 ---
 
-## 📦 2. Dữ liệu:
+## 2. Dữ liệu:
 
 Em đã thu thập được **1,000 ảnh gốc** (chưa xoay) với 4 danh mục chính như sau:
 
@@ -28,7 +27,7 @@ Em đã thu thập được **1,000 ảnh gốc** (chưa xoay) với 4 danh mụ
 | **Total** | **Diverse multi-source document dataset** | **1,000** |
 
 ### Phân chia dữ liệu
-Em chia dữ liệu với tỷ lệ **70% Train - 15% Validation - 15% Test**, sau đó để máy xoay ảnh rồi sinh nhãn tự động thu được các tập tương ứng:
+Em chia dữ liệu với tỷ lệ **70% Train - 15% Validation - 15% Test**, sau đó để máy xoay ảnh rồi sinh nhãn tự động thu được các tập ảnh tương ứng:
 * **Train Set (70%):** 700 original images ($2,800$ rotated samples)
 * **Val Set (15%):** 150 original images ($600$ rotated samples)
 * **Test Set (15%):** 150 original images ($600$ rotated samples)
@@ -52,7 +51,7 @@ Em chia dữ liệu với tỷ lệ **70% Train - 15% Validation - 15% Test**, s
   $$\text{Accuracy} = \frac{\text{Số ảnh dự đoán đúng tất cả các lớp}}{\text{Tổng số ảnh được đánh giá}}$$
 
 * **Macro Precision (Độ chuẩn xác trung bình):**
-  Trung bình cộng độ chuẩn xác của cả 4 lớp góc xoay. Chỉ số này phản ánh **độ tin cậy** khi mô hình đưa ra dự đoán cho một góc xoay cụ thể (tỷ lệ báo động giả thấp).
+  Trung bình cộng độ chuẩn xác của cả 4 lớp góc xoay. Chỉ số này phản ánh **độ tin cậy** khi mô hình đưa ra dự đoán cho một góc xoay cụ thể.
   $$\text{Precision}_i = \frac{\text{TP}_i}{\text{TP}_i + \text{FP}_i} \implies \text{Macro Precision} = \frac{1}{N} \sum_{i=1}^{N} \text{Precision}_i$$
   *(Trong đó: $N = 4$ là số lớp, $\text{TP}_i$ là số mẫu dự đoán đúng của lớp $i$, $\text{FP}_i$ là số mẫu bị đoán nhầm thành lớp $i$).*
 
