@@ -1,46 +1,41 @@
-# A4 Document Rotation Detection & Correction
+# Phân loại và điều chỉnh góc xoay của tài liệu A4 
 
 A Deep Learning-based supervised classification pipeline to detect and auto-correct document orientation ($0^\circ$, $90^\circ$, $180^\circ$, $270^\circ$) using ResNet18.
-
----
-## 💾 Model Checkpoint
-
-Due to Git file size limitations, the trained model weights are hosted on Google Drive.
-
-* 📥 **Download Trained Weights (`best_rotnet_model.pth`):** [Download via Google Drive](https://drive.google.com/file/d/1W6vvsKuBHFEuX6YKELcBGD8KVjwg3076/view?usp=sharing)
-
-## 📌 1. Project Overview & Methodology
-
-* **Task Standard:** Supervised Image Classification (4 classes corresponding to rotation angles: $0^\circ$, $90^\circ$, $180^\circ$, and $270^\circ$).
-* **Model Architecture:** ResNet18 (Pretrained on ImageNet).
-* **Data Augmentation:** On-the-fly continuous 4-angle rotation via custom PyTorch `Dataset`, effectively expanding the training capability to $4,000$ instances.
+Mô hình học Deep Learning có giám sát để phân loại và điều chỉnh góc xoay hướng của tài liệu  ($0^\circ$, $90^\circ$, $180^\circ$, $270^\circ$) sử dụng ResNet18.
 
 ---
 
-## 📦 2. Dataset Strategy & Stratified Split
+*Tập trọng số đã huấn luyện: (`best_rotnet_model.pth`):** [Download via Google Drive](https://drive.google.com/file/d/1W6vvsKuBHFEuX6YKELcBGD8KVjwg3076/view?usp=sharing)
 
-To ensure robustness, **1,000 original upright documents** were curated across 4 distinct real-world document categories:
+## 1.Tổng quan về dự án và phương pháp
+
+* **Tổng quan:** Phân loại ảnh có giám sát (4 classes tương ứng với góc xoay: $0^\circ$, $90^\circ$, $180^\circ$, and $270^\circ$).
+* **Kiến trúc hệ thống:** ResNet18 (đã có tham số pretrained trên ImageNet).
+* **Dữ liệu:** Sử dụng các ảnh với góc xoay tương ứng để huấn luyện.
+
+---
+
+## 📦 2. Dữ liệu:
+
+Em đã thu thập được **1,000 ảnh gốc** (chưa xoay) với 4 danh mục chính như sau:
 
 | Sub-category | Description / Source | Original Count |
 | :--- | :--- | :---: |
 | **Scan** | Flatbed scanned documents (DocVQA) | 250 |
-| **Receipt** | Receipts & Invoices (CORD-v2) | 250 |
+| **Receipt** | Receipts (CORD-v2) | 250 |
 | **Handwritten** | Full-page handwritten forms (IAM Handwritten Dataset) | 250 |
-| **Captured** | CamScanner / Mobile camera captures (SmartDoc) | 250 |
+| **Captured** | Mobile camera captures (SmartDoc) | 250 |
 | **Total** | **Diverse multi-source document dataset** | **1,000** |
 
-### Stratified Data Splitting
-Using `train_test_split` with a ratio of **70% Train - 15% Validation - 15% Test**, we maintain an identical sub-category class distribution across all three splits:
-
+### Phân chia dữ liệu
+Em chia dữ liệu với tỷ lệ **70% Train - 15% Validation - 15% Test**, sau đó để máy xoay ảnh rồi sinh nhãn tự động thu được các tập tương ứng:
 * **Train Set (70%):** 700 original images ($2,800$ rotated samples)
 * **Val Set (15%):** 150 original images ($600$ rotated samples)
 * **Test Set (15%):** 150 original images ($600$ rotated samples)
 
 ---
 
-## 📊 3. Performance & Evaluation Metrics
-
-### Comprehensive Performance Summary
+## 3. Các chỉ số đánh gìá và hiệu suất
 
 | Dataset Split | Accuracy | Macro Precision | Macro Recall | Macro F1-Score |
 | :--- | :---: | :---: | :---: | :---: |
@@ -49,20 +44,27 @@ Using `train_test_split` with a ratio of **70% Train - 15% Validation - 15% Test
 | **Test Set** | **98.33%** | **0.9835** | **0.9833** | **0.9833** |
 
 ### Confusion Matrices
-All 3 splits (Train, Val, Test) show consistent confusion matrix distributions without severe overfitting:
-
 ![Confusion Matrices](confusion_matrices_all.png)
 
-### Error & Misclassification Analysis
-* **Square/Symmetric Artifacts:** A small minority of errors occurred on near-square documents or sparse receipts where vertical text orientation cues are ambiguous.
-* **Handwritten Scrawls:** Documents containing only non-linear hand sketches or single-line handwritten signatures lack strong top-to-bottom reading gravity.
+### Ý nghĩa các thông số:
+* **Accuracy (Độ chính xác tổng thể):**
+  Tỷ lệ phần trăm tổng số ảnh được dự đoán đúng góc xoay ($0^\circ, 90^\circ, 180^\circ, 270^\circ$) trên tổng số lượng ảnh được đánh giá.
+  $$\text{Accuracy} = \frac{\text{Số ảnh dự đoán đúng tất cả các lớp}}{\text{Tổng số ảnh được đánh giá}}$$
 
+* **Macro Precision (Độ chuẩn xác trung bình):**
+  Trung bình cộng độ chuẩn xác của cả 4 lớp góc xoay. Chỉ số này phản ánh **độ tin cậy** khi mô hình đưa ra dự đoán cho một góc xoay cụ thể (tỷ lệ báo động giả thấp).
+  $$\text{Precision}_i = \frac{\text{TP}_i}{\text{TP}_i + \text{FP}_i} \implies \text{Macro Precision} = \frac{1}{N} \sum_{i=1}^{N} \text{Precision}_i$$
+  *(Trong đó: $N = 4$ là số lớp, $\text{TP}_i$ là số mẫu dự đoán đúng của lớp $i$, $\text{FP}_i$ là số mẫu bị đoán nhầm thành lớp $i$).*
+
+* **Macro Recall (Độ nhạy / Độ phủ trung bình):**
+  Trung bình cộng độ phủ của cả 4 lớp góc xoay. Chỉ số này đo lường **khả năng phát hiện và không bỏ sót** các ảnh thuộc từng góc xoay thực tế (tỷ lệ bỏ sót thấp).
+  $$\text{Recall}_i = \frac{\text{TP}_i}{\text{TP}_i + \text{FN}_i} \implies \text{Macro Recall} = \frac{1}{N} \sum_{i=1}^{N} \text{Recall}_i$$
+  *(Trong đó: $\text{FN}_i$ là số mẫu thực tế thuộc lớp $i$ nhưng bị mô hình đoán sót sang lớp khác).*
+
+* **Macro F1-Score (Điểm cân bằng F1 trung bình):**
+  Trung bình  giữa Macro Precision và Macro Recall. Đây là chỉ số quan trọng nhất đại diện cho hiệu năng tổng thể, đảm bảo mô hình đạt sự cân bằng tốt giữa độ tin cậy (Precision) và khả năng bắt đúng (Recall) mà không bị lệch sang bất kỳ góc xoay nào.
+  $$\text{Macro F1-Score} = 2 \times \frac{\text{Macro Precision} \times \text{Macro Recall}}{\text{Macro Precision} + \text{Macro Recall}}$$
+
+### Phân tích lỗi: 
+* **Mặc dù mô hình chạy tương đối đồng nhất giữa các tập train, val và test, nhưng vẫn có một số trường hợp phân loại sai do ảnh dễ gây nhầm lẫn góc xoay.
 ---
-
-## 🚀 4. How to Run
-
-### Installation
-```bash
-git clone [https://github.com/your-username/a4-document-rotation.git](https://github.com/your-username/a4-document-rotation.git)
-cd a4-document-rotation
-pip install -r requirements.txt
