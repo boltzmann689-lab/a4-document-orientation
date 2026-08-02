@@ -48,21 +48,17 @@ Em chia dữ liệu với tỷ lệ **70% Train - 15% Validation - 15% Test**, s
 ### Ý nghĩa các thông số:
 * **Accuracy (Độ chính xác tổng thể):**
   Tỷ lệ phần trăm tổng số ảnh được dự đoán đúng góc xoay ($0^\circ, 90^\circ, 180^\circ, 270^\circ$) trên tổng số lượng ảnh được đánh giá.
-  $$\text{Accuracy} = \frac{\text{Correct Predictions}}{\text{Total Images}}$$
+
 
 * **Macro Precision (Độ chuẩn xác trung bình):**
-  Trung bình cộng độ chuẩn xác của cả 4 lớp góc xoay. Chỉ số này phản ánh **độ tin cậy** khi mô hình đưa ra dự đoán cho một góc xoay cụ thể.
-  $$\text{Precision}_i = \frac{\text{TP}_i}{\text{TP}_i + \text{FP}_i} \implies \text{Macro Precision} = \frac{1}{N} \sum_{i=1}^{N} \text{Precision}_i$$
-  *(Trong đó: $N = 4$ là số lớp, $\text{TP}_i$ là số mẫu dự đoán đúng của lớp $i$, $\text{FP}_i$ là số mẫu bị đoán nhầm thành lớp $i$).*
+  Trung bình cộng độ chuẩn xác của cả 4 lớp góc xoay. Chỉ số này phản ánh độ tin cậy khi mô hình đưa ra dự đoán cho một góc xoay cụ thể.
+
 
 * **Macro Recall (Độ nhạy / Độ phủ trung bình):**
-  Trung bình cộng độ phủ của cả 4 lớp góc xoay. Chỉ số này đo lường **khả năng phát hiện và không bỏ sót** các ảnh thuộc từng góc xoay thực tế (tỷ lệ bỏ sót thấp).
-  $$\text{Recall}_i = \frac{\text{TP}_i}{\text{TP}_i + \text{FN}_i} \implies \text{Macro Recall} = \frac{1}{N} \sum_{i=1}^{N} \text{Recall}_i$$
-  *(Trong đó: $\text{FN}_i$ là số mẫu thực tế thuộc lớp $i$ nhưng bị mô hình đoán sót sang lớp khác).*
+  Trung bình cộng độ phủ của cả 4 lớp góc xoay. Chỉ số này đo lường khả năng phát hiện và không bỏ sót các ảnh thuộc từng góc xoay thực tế (tỷ lệ bỏ sót thấp).
 
 * **Macro F1-Score (Điểm cân bằng F1 trung bình):**
   Trung bình giữa Macro Precision và Macro Recall. Đây là chỉ số quan trọng nhất đại diện cho hiệu năng tổng thể, đảm bảo mô hình đạt sự cân bằng tốt giữa độ tin cậy (Precision) và khả năng bắt đúng (Recall) mà không bị lệch sang bất kỳ góc xoay nào.
-  $$\text{Macro F1-Score} = 2 \times \frac{\text{Macro Precision} \times \text{Macro Recall}}{\text{Macro Precision} + \text{Macro Recall}}$$
 
 ### Phân tích lỗi: 
 * Mặc dù mô hình chạy tương đối đồng nhất giữa các tập train, val và test, nhưng vẫn có một số trường hợp phân loại sai do ảnh dễ gây nhầm lẫn góc xoay.
