@@ -65,5 +65,5 @@ Em chia dữ liệu với tỷ lệ **70% Train - 15% Validation - 15% Test**, s
   $$\text{Macro F1-Score} = 2 \times \frac{\text{Macro Precision} \times \text{Macro Recall}}{\text{Macro Precision} + \text{Macro Recall}}$$
 
 ### Phân tích lỗi: 
-* **Mặc dù mô hình chạy tương đối đồng nhất giữa các tập train, val và test, nhưng vẫn có một số trường hợp phân loại sai do ảnh dễ gây nhầm lẫn góc xoay.
+* Mặc dù mô hình chạy tương đối đồng nhất giữa các tập train, val và test, nhưng vẫn có một số trường hợp phân loại sai do ảnh dễ gây nhầm lẫn góc xoay.
 ---
