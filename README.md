@@ -34,7 +34,7 @@ Em chia dữ liệu với tỷ lệ **70% Train - 15% Validation - 15% Test**, s
 
 ---
 
-## 3. Các chỉ số đánh gìá và hiệu suất
+## 3. Các chỉ số đánh giá và hiệu suất
 
 | Dataset Split | Accuracy | Macro Precision | Macro Recall | Macro F1-Score |
 | :--- | :---: | :---: | :---: | :---: |
