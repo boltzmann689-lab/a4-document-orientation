@@ -61,5 +61,5 @@ Em chia dữ liệu với tỷ lệ **70% Train - 15% Validation - 15% Test**, s
   Trung bình giữa Macro Precision và Macro Recall. Đây là chỉ số quan trọng nhất đại diện cho hiệu năng tổng thể, đảm bảo mô hình đạt sự cân bằng tốt giữa độ tin cậy (Precision) và khả năng bắt đúng (Recall) mà không bị lệch sang bất kỳ góc xoay nào.
 
 ### Phân tích lỗi: 
-* Mặc dù mô hình chạy tương đối đồng nhất giữa các tập train, val và test, nhưng vẫn có một số trường hợp phân loại sai do ảnh dễ gây nhầm lẫn góc xoay.
+* Mặc dù mô hình chạy tương đối đồng nhất giữa các tập train, val và test, nhưng vẫn có một số trường hợp phân loại sai do ảnh dễ gây nhầm lẫn góc xoay. 
 ---
