@@ -20,11 +20,13 @@ Em đã thu thập được **1,000 ảnh gốc** (chưa xoay) với 4 danh mụ
 
 | Sub-category | Description / Source | Original Count |
 | :--- | :--- | :---: |
-| **Scan** | Flatbed scanned documents (DocVQA) | 250 |
-| **Receipt** | Receipts (CORD-v2) | 250 |
-| **Handwritten** | Full-page handwritten forms (IAM Handwritten Dataset) | 250 |
-| **Captured** | Mobile camera captures (SmartDoc) | 250 |
+| **Scan** | Flatbed scanned documents [DocVQA](https://huggingface.co/datasets/nielsr/docvqa_1200_examples) | 250 |
+| **Receipt** | Receipts [CORD-v2](https://huggingface.co/datasets/naver-clova-ix/cord-v2)| 250 |
+| **Handwritten** | Full-page handwritten forms [IAM Handwritten Dataset](https://www.kaggle.com/datasets/naderabdelghany/iam-handwritten-forms-dataset) | 250 |
+| **Captured** | Mobile camera captures [SmartDoc](https://www.kaggle.com/datasets/octaviusgaster/smartdoc2015-extracted-frames) | 250 |
 | **Total** | **Diverse multi-source document dataset** | **1,000** |
+
+
 
 ### Phân chia dữ liệu
 Em chia dữ liệu với tỷ lệ **70% Train - 15% Validation - 15% Test**, sau đó để máy xoay ảnh rồi sinh nhãn tự động thu được các tập ảnh tương ứng:
