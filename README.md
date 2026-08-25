@@ -20,6 +20,15 @@ Instead of relying solely on standard academic papers (e.g., arXiv), the system 
    * **Validation**: 1,000 images
    * **Fixed Test**: 1,000 images
 
+### Training Setup & Hyperparameters
+Based on prior experimentation, the optimal setup for this classification task utilizes a **ResNet-18** backbone configured with the following parameters:
+* **Optimizer**: AdamW ($\text{Learning Rate} = 10^{-4}$, $\text{Weight Decay} = 10^{-2}$)
+* **Loss Function**: CrossEntropyLoss
+* **Data Augmentations**:
+  * `ColorJitter`: Brightness = $0.2$, Contrast = $0.2$
+  * `RandomRotation`: Degrees = $\pm20^\circ$
+<img width="2370" height="1470" alt="proposed_multiscale_fusion_curve(1)" src="https://github.com/user-attachments/assets/21cc8030-382f-426a-996f-3aff9318cee8" />
+
 ---
 
 ## Proposed Methodology
