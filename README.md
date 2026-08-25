@@ -63,6 +63,7 @@ flowchart TD
 
 ## Evaluation
 <img width="2370" height="1470" alt="proposed_multiscale_fusion_curve(1)" src="https://github.com/user-attachments/assets/21cc8030-382f-426a-996f-3aff9318cee8" />
+
 ### Performance Metrics
 
 | Metric | Accuracy |
