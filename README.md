@@ -5,7 +5,7 @@ A deep learning pipeline for document orientation prediction ($0^\circ, 90^\circ
 ---
 
 ## Dataset
-<img width="2370" height="1470" alt="proposed_multiscale_fusion_curve(1)" src="https://github.com/user-attachments/assets/21cc8030-382f-426a-996f-3aff9318cee8" /><img width="1340" height="605" alt="Screenshot_2026-08-24_23-56-54" src="https://github.com/user-attachments/assets/7022a1e6-4e10-4646-b126-4fb9c497c4b9" />
+<img width="1340" height="605" alt="Screenshot_2026-08-24_23-56-54" src="https://github.com/user-attachments/assets/7022a1e6-4e10-4646-b126-4fb9c497c4b9" />
 
 Instead of relying solely on standard academic papers (e.g., arXiv), the system utilizes a diverse dataset aggregated from multiple real-world document sources (>43,000 raw images):
 * **SROIE (`sroie-datasetv2`)**: Scanned receipts containing various fonts, thermal paper noise, and irregular layouts.
@@ -62,6 +62,7 @@ flowchart TD
 ```
 
 ## Evaluation
+<img width="2370" height="1470" alt="proposed_multiscale_fusion_curve(1)" src="https://github.com/user-attachments/assets/21cc8030-382f-426a-996f-3aff9318cee8" />
 ### Performance Metrics
 
 | Metric | Accuracy |
