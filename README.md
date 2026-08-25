@@ -1,67 +1,73 @@
-# Phân loại và điều chỉnh góc xoay của tài liệu A4 
+## Experimental Setup
 
-Mô hình học Deep Learning có giám sát để phân loại và điều chỉnh góc xoay hướng của tài liệu  ($0^\circ$, $90^\circ$, $180^\circ$, $270^\circ$) sử dụng ResNet18.
+All models were trained using the same optimization and augmentation configuration:
 
----
+- **Optimizer:** AdamW
+- **Learning rate:** $10^{-4}$
+- **Weight decay:** $10^{-2}$
+- **Loss function:** CrossEntropyLoss
+- **Color augmentation:** `ColorJitter(brightness=0.2, contrast=0.2)`
+- **Geometric augmentation:** `RandomRotation(degrees=20)`
+- **Training duration:** 5 epochs
 
-*Tập trọng số đã huấn luyện: (`best_rotnet_model.pth`):* [Download via Google Drive](https://drive.google.com/file/d/1W6vvsKuBHFEuX6YKELcBGD8KVjwg3076/view?usp=sharing)
-
-## 1.Tổng quan về dự án và phương pháp
-
-* **Tổng quan:** Phân loại ảnh có giám sát (4 classes tương ứng với góc xoay: $0^\circ$, $90^\circ$, $180^\circ$, and $270^\circ$).
-* **Kiến trúc hệ thống:** ResNet18 (đã có tham số pretrained trên ImageNet).
-* **Dữ liệu:** Sử dụng các ảnh với góc xoay tương ứng để huấn luyện.
-
----
-
-## 2. Dữ liệu:
-
-Em đã thu thập được **1,000 ảnh gốc** (chưa xoay) với 4 danh mục chính như sau:
-
-| Sub-category | Description / Source | Original Count |
-| :--- | :--- | :---: |
-| **Scan** | Flatbed scanned documents [DocVQA](https://huggingface.co/datasets/nielsr/docvqa_1200_examples) | 250 |
-| **Receipt** | Receipts [CORD-v2](https://huggingface.co/datasets/naver-clova-ix/cord-v2)| 250 |
-| **Handwritten** | Full-page handwritten forms [IAM Handwritten Dataset](https://www.kaggle.com/datasets/naderabdelghany/iam-handwritten-forms-dataset) | 250 |
-| **Captured** | Mobile camera captures [SmartDoc](https://www.kaggle.com/datasets/octaviusgaster/smartdoc2015-extracted-frames) | 250 |
-| **Total** | **Diverse multi-source document dataset** | **1,000** |
-
-
-
-### Phân chia dữ liệu
-Em chia dữ liệu với tỷ lệ **70% Train - 15% Validation - 15% Test**, sau đó để máy xoay ảnh rồi sinh nhãn tự động thu được các tập ảnh tương ứng:
-* **Train Set (70%):** 700 original images ($2,800$ rotated samples)
-* **Val Set (15%):** 150 original images ($600$ rotated samples)
-* **Test Set (15%):** 150 original images ($600$ rotated samples)
+The baseline and proposed models were evaluated on the same fixed test set to ensure a direct and fair comparison.
 
 ---
 
-## 3. Các chỉ số đánh giá và hiệu suất
+## Experimental Results
 
-| Dataset Split | Accuracy | Macro Precision | Macro Recall | Macro F1-Score |
-| :--- | :---: | :---: | :---: | :---: |
-| **Train Set** | 99.82% | 0.9982 | 0.9982 | 0.9982 |
-| **Validation Set** | 98.67% | 0.9868 | 0.9867 | 0.9867 |
-| **Test Set** | **98.33%** | **0.9835** | **0.9833** | **0.9833** |
+### Performance Comparison
 
-### Confusion Matrices
-![Confusion Matrices](confusion_matrices_all.png)
+| Model | Architecture | Input Processing | Train Acc. | Val Acc. | Test Acc. |
+|---|---|---|---:|---:|---:|
+| **Baseline** | ResNet-18 | Full Image ($224 \times 224$) | 90.2% | 89.5% | 89.3% |
+| **Proposed** | Multi-Scale Fusion ResNet-18 | Global Image + 4 Local Patches | **93.1%** | **91.8%** | **91.5%** |
 
-### Ý nghĩa các thông số:
-* **Accuracy (Độ chính xác tổng thể):**
-  Tỷ lệ phần trăm tổng số ảnh được dự đoán đúng góc xoay ($0^\circ, 90^\circ, 180^\circ, 270^\circ$) trên tổng số lượng ảnh được đánh giá.
+### Key Findings
 
+#### Performance Gain
 
-* **Macro Precision (Độ chuẩn xác trung bình):**
-  Trung bình cộng độ chuẩn xác của cả 4 lớp góc xoay. Chỉ số này phản ánh độ tin cậy khi mô hình đưa ra dự đoán cho một góc xoay cụ thể.
+The proposed Multi-Scale Fusion method achieved a **+2.2 percentage-point improvement** on the fixed test set compared with the standard ResNet-18 baseline:
 
+$$
+91.5\% - 89.3\% = \mathbf{+2.2\ percentage\ points}
+$$
 
-* **Macro Recall (Độ nhạy / Độ phủ trung bình):**
-  Trung bình cộng độ phủ của cả 4 lớp góc xoay. Chỉ số này đo lường khả năng phát hiện và không bỏ sót các ảnh thuộc từng góc xoay thực tế (tỷ lệ bỏ sót thấp).
+#### Convergence & Stability
 
-* **Macro F1-Score (Điểm cân bằng F1 trung bình):**
-  Trung bình giữa Macro Precision và Macro Recall. Đây là chỉ số quan trọng nhất đại diện cho hiệu năng tổng thể, đảm bảo mô hình đạt sự cân bằng tốt giữa độ tin cậy (Precision) và khả năng bắt đúng (Recall) mà không bị lệch sang bất kỳ góc xoay nào.
+Both models converged stably within 5 epochs, with no clear signs of overfitting observed during training.
 
-### Phân tích lỗi: 
-* Mặc dù mô hình chạy tương đối đồng nhất giữa các tập train, val và test, nhưng vẫn có một số trường hợp phân loại sai do ảnh dễ gây nhầm lẫn góc xoay. 
+#### Generalization
+
+The proposed model achieved a validation accuracy of **91.8%** and a fixed test accuracy of **91.5%**. The close agreement between the two results indicates stable generalization to unseen real-world document images.
+
+### Comparison with Previous Dataset
+
+On the previous arXiv-based dataset, the baseline ResNet-18 achieved **99.89%** test accuracy. On the more diverse real-world dataset used in this project, the baseline achieved **89.3%**.
+
+This reduction is expected because the new dataset contains substantially more heterogeneous document types, layouts, fonts, and background conditions.
+
 ---
+
+## Training Curves
+
+The training and validation accuracy curves are provided below.
+
+### Baseline ResNet-18
+
+![Baseline Training Curve](baseline_training_curve.png)
+
+### Proposed Multi-Scale Fusion ResNet-18
+
+![Proposed Training Curve](proposed_multiscale_fusion_curve(1).png)
+
+---
+
+## Installation & Usage
+
+### 1. Requirements
+
+Install the required dependencies:
+
+```bash
+pip install -r requirements.txt
