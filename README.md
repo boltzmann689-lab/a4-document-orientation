@@ -50,3 +50,36 @@ flowchart TD
 
     H --> I["Fully Connected (2560 -> 512 -> 4)"]
     I --> J["0° / 90° / 180° / 270°"]
+```
+
+## Evaluation
+
+![Proposed Multi-Scale Fusion ResNet Training & Validation Accuracy](proposed_multiscale_fusion_curve(1).png)
+
+### Performance Metrics
+
+| Metric | Accuracy |
+| :--- | :---: |
+| **Train Accuracy** | $93.1\%$ |
+| **Validation Accuracy** | $91.8\%$ |
+| **Test Accuracy (Fixed Test Set)** | **$91.5\%$** |
+
+The proposed method achieves **$91.5\%$ accuracy** on the unstandardized real-world document test set. Convergence is fast and stable within 5 epochs, demonstrating strong generalization without overfitting.
+
+---
+
+## How to Run
+
+### Installation
+
+Install the required dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+### Inference
+Run the prediction on any document image using pre-trained weights:
+```bash
+python predict.py --image path/to/document.jpg --weights weights/best_multiscale_fusion.pth
+```
+
