@@ -1,73 +1,52 @@
-## Experimental Setup
+# Document Orientation Classification
 
-All models were trained using the same optimization and augmentation configuration:
-
-- **Optimizer:** AdamW
-- **Learning rate:** $10^{-4}$
-- **Weight decay:** $10^{-2}$
-- **Loss function:** CrossEntropyLoss
-- **Color augmentation:** `ColorJitter(brightness=0.2, contrast=0.2)`
-- **Geometric augmentation:** `RandomRotation(degrees=20)`
-- **Training duration:** 5 epochs
-
-The baseline and proposed models were evaluated on the same fixed test set to ensure a direct and fair comparison.
+A deep learning pipeline for document orientation prediction ($0^\circ, 90^\circ, 180^\circ, 270^\circ$) using a parallel dual-stream **Multi-Scale Fusion ResNet** architecture.
 
 ---
 
-## Experimental Results
+## Dataset
 
-### Performance Comparison
+Instead of relying solely on standard academic papers (e.g., arXiv), the system utilizes a diverse dataset aggregated from multiple real-world document sources (>43,000 raw images):
+* **SROIE (`sroie-datasetv2`)**: Scanned receipts containing various fonts, thermal paper noise, and irregular layouts.
+* **CORD (`cord-1000`)**: Consolidated receipt datasets with complex background elements and distorted text alignment.
+* **Receipt Dataset (`receiptdatasetssd300v2`)**: Commercial receipts with varying lighting conditions and physical folds.
+* **RVL-CDIP (`the-rvlcdip-dataset-test`)**: Diverse document types including letters, forms, invoices, and reports.
 
-| Model | Architecture | Input Processing | Train Acc. | Val Acc. | Test Acc. |
-|---|---|---|---:|---:|---:|
-| **Baseline** | ResNet-18 | Full Image ($224 \times 224$) | 90.2% | 89.5% | 89.3% |
-| **Proposed** | Multi-Scale Fusion ResNet-18 | Global Image + 4 Local Patches | **93.1%** | **91.8%** | **91.5%** |
-
-### Key Findings
-
-#### Performance Gain
-
-The proposed Multi-Scale Fusion method achieved a **+2.2 percentage-point improvement** on the fixed test set compared with the standard ResNet-18 baseline:
-
-$$
-91.5\% - 89.3\% = \mathbf{+2.2\ percentage\ points}
-$$
-
-#### Convergence & Stability
-
-Both models converged stably within 5 epochs, with no clear signs of overfitting observed during training.
-
-#### Generalization
-
-The proposed model achieved a validation accuracy of **91.8%** and a fixed test accuracy of **91.5%**. The close agreement between the two results indicates stable generalization to unseen real-world document images.
-
-### Comparison with Previous Dataset
-
-On the previous arXiv-based dataset, the baseline ResNet-18 achieved **99.89%** test accuracy. On the more diverse real-world dataset used in this project, the baseline achieved **89.3%**.
-
-This reduction is expected because the new dataset contains substantially more heterogeneous document types, layouts, fonts, and background conditions.
+### Dataset Pipeline
+1. **Sampling**: 2,500 raw document images were randomly selected from the combined dataset pool.
+2. **Augmentation**: Each image was rotated by $0^\circ, 90^\circ, 180^\circ,$ and $270^\circ$, generating a balanced dataset of **10,000 images**.
+3. **Data Splitting**: Group-based stratified splitting ($8:1:1$) was applied to ensure all rotated variants of the same document reside within the same split:
+   * **Train**: 8,000 images
+   * **Validation**: 1,000 images
+   * **Fixed Test**: 1,000 images
 
 ---
 
-## Training Curves
+## Proposed Methodology
 
-The training and validation accuracy curves are provided below.
+A patch-based dual-stream pipeline is introduced to extract both macro-level layout structures and micro-level textual features:
 
-### Baseline ResNet-18
+1. **Dual Inputs**: Two separate inputs are generated from a single document image: the full global image and 4 localized center patches.
+2. **Global Stream**: The full page image ($224 \times 224$) passes through a ResNet-18 backbone to learn macro-level structural characteristics (page borders, whitespace margins, title positioning, layout geometry) and extracts **512 features**.
+3. **Patch Stream**: The 4 center patches ($112 \times 112$ each) pass through an independent ResNet-18 backbone to capture micro-level local features (text line orientation, character alignments, diacritics/accents) and extract **2048 features** ($4 \times 512$).
+4. **Feature Fusion**: Both backbones operate completely in parallel. The extracted feature maps are concatenated into a unified **2560-dimensional vector**.
+5. **Classification**: The classifier receives the 2560 fused features, combining global structure with local textual cues to classify the orientation class.
 
-![Baseline Training Curve](baseline_training_curve.png)
+### Architecture Diagram
 
-### Proposed Multi-Scale Fusion ResNet-18
+```mermaid
+flowchart TD
+    A[Input Document Image] --> B["Global Image (224 x 224)"]
+    A --> C["4 Patches (112 x 112)"]
 
-![Proposed Training Curve](proposed_multiscale_fusion_curve(1).png)
+    B --> D[ResNet-18 Global Backbone]
+    C --> E[ResNet-18 Patch Backbone]
 
----
+    D --> F[512 Features]
+    E --> G[2048 Features]
 
-## Installation & Usage
+    F --> H["Concatenate (2560)"]
+    G --> H
 
-### 1. Requirements
-
-Install the required dependencies:
-
-```bash
-pip install -r requirements.txt
+    H --> I["Fully Connected (2560 -> 512 -> 4)"]
+    I --> J["0° / 90° / 180° / 270°"]
