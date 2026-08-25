@@ -1,19 +1,6 @@
-# Deep Learning
-torch>=2.2.0
-torchvision>=0.17.0
-
-# Dataset
-datasets>=2.20.0
-kagglehub>=0.3.0
-
-# Data Processing
-numpy>=1.26
-pandas>=2.2
-scikit-learn>=1.5
-
-# Image Processing
-Pillow>=10.3.0
-
-# Visualization
-matplotlib>=3.9
-tqdm>=4.66
+torch>=2.0.0
+torchvision>=0.15.0
+pillow>=9.0.0
+opencv-python>=4.5.0
+numpy>=1.21.0
+matplotlib>=3.5.0
